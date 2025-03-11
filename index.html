@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DGDrive Direct Link Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 10px;
+            width: 80%;
+            max-width: 400px;
+            font-size: 16px;
+        }
+        #output {
+            margin-top: 20px;
+            word-break: break-word;
+            color: #00ff00;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>DGDrive Direct Link Generator</h2>
+    <input type="text" id="dgdriveLink" placeholder="Paste DGDrive link here..." />
+    <button onclick="bypassDgDrive()">Generate Direct Link</button>
+    <p id="output"></p>
+
+    <script>
+        async function bypassDgDrive() {
+            let inputLink = document.getElementById("dgdriveLink").value;
+            let proxyUrl = "https://your-free-host.com/proxy.php?url=" + encodeURIComponent(inputLink);
+            
+            if (!inputLink.includes("dgdrive")) {
+                document.getElementById("output").innerHTML = "❌ Invalid DGDrive link!";
+                return;
+            }
+
+            try {
+                let response = await fetch(proxyUrl);
+                let data = await response.json();
+
+                if (data.direct_link) {
+                    document.getElementById("output").innerHTML = 
+                        `<a href="${data.direct_link}" target="_blank">✅ Click here to Download</a>`;
+                } else {
+                    document.getElementById("output").innerHTML = "⚠️ Direct link not found!";
+                }
+
+            } catch (error) {
+                document.getElementById("output").innerHTML = "❌ Error fetching the link!";
+            }
+        }
+    </script>
+
+</body>
+</html>
